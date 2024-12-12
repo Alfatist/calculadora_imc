@@ -1,9 +1,18 @@
+import 'dart:io';
+
 import 'package:calculadora_imc/models/datarows.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
+import "package:path_provider/path_provider.dart" as path_provider;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Directory documentsDirectory =
+      await path_provider.getApplicationDocumentsDirectory();
+  Hive.init(documentsDirectory.path);
+  await Hive.openBox("dataBox");
   runApp(const MainApp());
 }
 
@@ -19,7 +28,8 @@ class _MainAppState extends State<MainApp> {
   late FocusNode inputAltura;
   double? _peso;
   double? _altura;
-  Datarows datarows = Datarows();
+
+  Datarows datarows = Datarows("");
 
   @override
   void initState() {
